@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#11110f">
+  <meta name="description" content="Freedom Call: Syndicate — 1868 Londra'sında hikâye ve açık dünya mimarisi prototipi.">
+  <title>Freedom Call: Syndicate | London 1868 · Prototype 0.5</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="masthead">
+      <div class="crest" aria-hidden="true"><span>FC</span><i>✦</i></div>
+      <div class="brand">
+        <p class="eyebrow">A VICTORIAN OPEN-WORLD ADVENTURE</p>
+        <h1>FREEDOM CALL: <span>SYNDICATE</span></h1>
+        <p class="subtitle">LONDON · 1868 · THE CITY BELONGS TO THOSE WHO DARE</p>
+      </div>
+      <div class="date-stamp"><span>CAMPAIGN FILE</span><strong>NO. 1868—07</strong><small>CONFIDENTIAL</small></div>
+    </header>
+
+    <section class="status-strip" aria-label="Dünya durumu">
+      <div class="status-item"><span class="status-dot"></span><span>YERALTI SENDİKASI</span><strong id="syndicate-status">HÜCRE KURULUYOR</strong></div>
+      <div class="status-item"><span class="status-label">ŞEHİR KONTROLÜ</span><strong id="city-freedom">0% ÖZGÜR</strong></div>
+      <div class="status-item"><span class="status-label">TOPLANAN TARİHÎ KAYITLAR</span><strong id="collectible-count">00 / 12</strong></div>
+      <div class="status-item campaign-tag"><span>MAIN STORY</span><strong id="act-label">ACT I · THE SPARK</strong></div>
+    </section>
+
+    <div class="dashboard">
+      <section class="world-column">
+        <article class="panel city-panel">
+          <div class="panel-heading city-heading">
+            <div><p class="eyebrow">THE LIVING CITY</p><h2 id="district-title">WHITECHAPEL</h2><p id="district-subtitle" class="muted">Dar sokaklar · işçi evleri · The Iron Cogs</p></div>
+            <div class="layer-switch" role="group" aria-label="Harita katmanı">
+              <button class="layer-btn is-active" data-layer="street" type="button" title="Sokak seviyesindesin">▤ Sokak</button>
+              <button class="layer-btn" data-layer="rooftop" type="button" title="Işınlanmaz: G ile kanca atarak çatıya çık">⌂ Çatıya çık</button>
+            </div>
+          </div>
+          <div class="canvas-frame">
+            <canvas id="city-canvas" width="1200" height="570" aria-label="Tıklanabilir Viktorya dönemi Londra sahnesi"></canvas>
+            <div class="canvas-topline"><span id="scene-label">WHITECHAPEL · STREET LEVEL</span><span class="live-indicator"><i></i> 1868 / LIVE WORLD</span></div>
+            <div class="canvas-bottomline"><span>✦ Altın işaretler: etkileşim noktaları</span><span id="map-coordinates">GRID 07 · 04</span></div>
+          </div>
+          <div class="movement-console" aria-label="Karakter hareket kontrolleri">
+            <div class="movement-instructions">
+              <strong>FREE ROAM</strong>
+              <span><kbd>A</kbd> <kbd>D</kbd> veya <kbd>←</kbd> <kbd>→</kbd> yürü</span>
+              <span><kbd>SHIFT</kbd> koş</span>
+              <span><kbd>SPACE</kbd> zıpla</span>
+              <span><kbd>G</kbd> / sağ tık kanca</span>
+              <span><kbd>F</kbd> basılı tut çek</span>
+              <span><kbd>X</kbd> halatı bırak</span>
+              <span><kbd>E</kbd> etkileş / suikast</span>
+              <span><kbd>J</kbd> hafif</span><span><kbd>K</kbd> ağır</span><span><kbd>I</kbd> parry</span>
+            </div>
+            <div class="touch-controls" aria-label="Dokunmatik hareket düğmeleri">
+              <button type="button" class="touch-btn touch-direction" data-move="left" aria-label="Sola yürü">◀</button>
+              <button type="button" class="touch-btn touch-direction" data-move="right" aria-label="Sağa yürü">▶</button>
+              <button type="button" class="touch-btn touch-action" data-game-action="jump">Zıpla <small>↑</small></button>
+              <button type="button" class="touch-btn touch-action" data-game-action="hook">Kanca <small>G</small></button>
+              <button type="button" class="touch-btn touch-action" data-hold-action="pull">Çek <small>F</small></button>
+              <button type="button" class="touch-btn touch-action" data-game-action="release">Bırak <small>X</small></button>
+              <button type="button" class="touch-btn touch-action" data-game-action="interact">Etkileş <small>E</small></button>
+              <button type="button" class="touch-btn touch-combat" data-game-action="light">Hafif <small>J</small></button>
+              <button type="button" class="touch-btn touch-combat" data-game-action="heavy">Ağır <small>K</small></button>
+              <button type="button" class="touch-btn touch-combat" data-game-action="parry">Parry <small>I</small></button>
+            </div>
+          </div>
+          <div class="map-legend">
+            <span><i class="legend-dot gold"></i> Aktif hedef</span>
+            <span><i class="legend-dot paper"></i> Koleksiyon</span>
+            <span><i class="legend-dot red"></i> Çete / Boss</span>
+            <span><i class="legend-dot fog"></i> Tarihî simge</span>
+            <span class="legend-hint">Hedefe yaklaş · doğru seviyede E ile etkileş</span>
+          </div>
+        </article>
+
+        <section class="district-section">
+          <div class="section-heading"><div><p class="eyebrow">DISTRICT CONTROL</p><h2>Londra'nın dört cephesi</h2></div><span class="small-counter">04 DISTRICTS</span></div>
+          <div id="district-rail" class="district-rail"></div>
+        </section>
+
+        <details class="panel matrix-panel">
+          <summary><span><span class="summary-icon">▦</span> Katmanlı harita matrisi</span><span class="summary-meta" id="matrix-summary">14 × 8 GRID · STREET</span></summary>
+          <div class="matrix-body">
+            <div class="matrix-copy"><p id="matrix-title">WHITECHAPEL / STREET GRID</p><p class="muted">Hücreler; yolları, bina kütlelerini, kanca noktalarını, tarihî simgeleri ve çete alanlarını temsil eder.</p></div>
+            <div id="map-matrix" class="map-matrix" aria-label="Harita matrisi"></div>
+            <div class="matrix-legend"><span><i class="cell-key road"></i> Yol</span><span><i class="cell-key building"></i> Bina</span><span><i class="cell-key anchor"></i> Kanca</span><span><i class="cell-key landmark"></i> Simge</span><span><i class="cell-key gang"></i> Çete</span><span><i class="cell-key water"></i> Su</span></div>
+          </div>
+        </details>
+
+        <section class="panel city-intel">
+          <div class="intel-icon">✉</div>
+          <div class="intel-copy"><p class="eyebrow">FIELD NOTES</p><h3 id="intel-title">Sisin ardında bir şehir</h3><p id="intel-copy">Her bölgenin kendine ait sokak ağı, çatı rotası, tarihi simgeleri ve Iron Cogs karargâhı vardır.</p></div>
+          <div class="intel-counts"><div><strong id="letters-count">00</strong><span>MEKTUP</span></div><div><strong id="relics-count">00</strong><span>YADİGÂR</span></div><div><strong id="chests-count">00</strong><span>SANDIK</span></div></div>
+        </section>
+      </section>
+
+      <aside class="command-column">
+        <section class="panel protagonists-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">DUAL PROTAGONISTS</p><h2>Sendikanın yüzleri</h2></div><kbd>Q</kbd></div>
+          <div class="character-tabs" role="group" aria-label="Karakter seç">
+            <button class="character-tab is-active" data-character="arthur" type="button"><span class="tab-monogram">A</span><span><strong>ARTHUR</strong><small>THE BRAWLER</small></span><i class="active-mark">ACTIVE</i></button>
+            <button class="character-tab" data-character="eleanor" type="button"><span class="tab-monogram">E</span><span><strong>ELEANOR</strong><small>THE SHADE</small></span><i class="active-mark">ACTIVE</i></button>
+          </div>
+          <div class="character-profile" id="character-profile"></div>
+          <div class="stats-grid" id="character-stats"></div>
+          <div class="ability-note"><span class="ability-glyph">✦</span><div><p id="ability-title">IRON WILL</p><span id="ability-copy">Arthur dövüşte daha dayanıklı ve baskın.</span></div></div>
+        </section>
+
+        <section class="panel quest-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">MAIN STORY · QUEST ENGINE</p><h2 id="quest-title">Birliğin Kıvılcımı</h2></div><span class="quest-number" id="quest-number">01 / 04</span></div>
+          <div class="quest-actline"><span id="quest-act">ACT I</span><span id="quest-location">WHITECHAPEL</span></div>
+          <p id="quest-description" class="quest-description">Whitechapel'da bir kıvılcım yak ve yeraltı sendikasını kur.</p>
+          <div class="quest-progress-head"><span>HİKÂYE İLERLEMESİ</span><strong id="quest-progress-label">0%</strong></div>
+          <div class="progress-track"><span id="quest-progress-bar" style="width:0%"></span></div>
+          <div id="quest-objectives" class="quest-objectives"></div>
+          <div class="current-objective"><span class="target-diamond">◆</span><div><small>AKTİF HEDEF</small><strong id="current-objective-title">Ada Mercer ile buluş</strong><span id="current-objective-copy">Haritadaki konuşma işaretini bul.</span></div></div>
+        </section>
+
+        <section class="panel dialogue-panel" aria-live="polite">
+          <div class="dialogue-head"><div class="portrait" id="dialogue-portrait"><span id="portrait-initials">FC</span></div><div class="speaker-meta"><p class="eyebrow">FIELD CONVERSATION</p><h3 id="dialogue-speaker">Londra'dan bir ses</h3><span id="dialogue-role">UNDERGROUND SYNDICATE</span></div><span class="dialogue-mark">❝</span></div>
+          <p class="dialogue-text" id="dialogue-text">Şehir dumanın altında boğuluyor. Her sokakta bir hikâye, her çatıda bir kaçış yolu var.</p>
+          <div class="dialogue-footer"><span id="dialogue-counter">DOSSIER 01</span><button id="dialogue-next" class="button button-gold" type="button" disabled>Konuşmayı sürdür <span>→</span></button></div>
+        </section>
+
+        <section class="panel control-panel">
+          <div class="section-heading compact"><div><p class="eyebrow">CITY LIBERATION</p><h2>Bölge durumu</h2></div><span class="control-symbol">⚒</span></div>
+          <div id="district-progress-list" class="district-progress-list"></div>
+          <div class="control-foot"><span class="status-dot"></span><span id="control-foot-text">Iron Cogs hâlâ şehrin kontrolünde.</span></div>
+        </section>
+      </aside>
+    </div>
+
+    <section id="combat-overlay" class="combat-overlay" aria-live="polite">
+      <div class="player-vitals"><div class="vitals-label"><span id="player-vitals-name">ARTHUR HAWTHORNE</span><span id="player-health-label">100 / 100</span></div><div class="health-track"><i id="player-health-bar"></i></div><div class="combat-hint" id="combat-hint">J Hafif saldırı · K Ağır saldırı · I Parry · E Sessiz suikast</div></div>
+      <div id="boss-vitals" class="boss-vitals is-hidden"><div class="boss-vitals-head"><span id="boss-name">IRON COGS ENFORCER</span><span id="boss-phase">PHASE I</span></div><div class="boss-health-track"><i id="boss-health-bar"></i></div><div class="boss-stamina-track"><i id="boss-stamina-bar"></i></div></div>
+      <div id="combat-feed" class="combat-feed" aria-live="polite"></div>
+    </section>
+    <footer class="page-footer"><span>FREEDOM CALL: SYNDICATE</span><span>AN OPEN-WORLD STORY ARCHITECTURE PROTOTYPE</span><span>BUILD 0.5 · LONDON, 1868</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
